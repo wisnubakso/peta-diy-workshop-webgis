@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Metadata -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <!-- Judul pada tab browser -->
+    <title>LeafletJS</title>
+
+    <!-- Leaflet CSS Library -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <!-- Style untuk tampilan peta fullscreen -->
+    <style>
+      html,
+      body,
+      #map {
+        height: 100%;
+        width: 100%;
+        margin: 0px;
+      }
+      #map {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Leaflet JavaScript Library -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- HTML Block untuk menampilkan peta -->
+    <div id="map"></div>
+    <script>
+      /* Initial Map */
+      var map = L.map("map").setView([-7.7828715, 110.3670591], 10); //lat, long, zoom
+
+      // disable Leaflet Attribution
+      map.attributionControl.setPrefix("");
+
+      /* Tile Basemap */
+      var OSM = L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+          //attribution akan muncul di pojok kanan bawah
+          attribution:
+            '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | <a href="https://www.unsorry.net" target="_blank">unsorry@2022</a>',
+        }
+      );
+      var GoogleSatellite = L.tileLayer(
+        "https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+        {
+          maxZoom: 20,
+          subdomains: ["mt0", "mt1", "mt2", "mt3"],
+          attribution: "Google Satellite",
+        }
+      );
+      var GoogleHybrid = L.tileLayer(
+        "https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
+        {
+          maxZoom: 20,
+          subdomains: ["mt0", "mt1", "mt2", "mt3"],
+          attribution: "Google Hybrid",
+        }
+      );
+      OSM.addTo(map); //Memanggil basemap untuk ditampilkan ketika halaman dipanggil
+
+      /* Marker */
+      var marker = L.marker([-7.7828715, 110.3670591], { draggable: true }); //lat, long
+      marker.addTo(map); //Marker ditampilkan ketika halaman dipanggil
+      /* Popup Marker */
+      marker.bindPopup("Kota Yogyakarta"); //Popup ditampilkan ketika marker di-klik
+      /* Open Popup */
+      //marker.openPopup(); //Pop up ditampilkan ketika halaman dipanggil
+      /* Tooltip Marker */
+      marker.bindTooltip("Klik untuk informasi daerah"); //memunculkan tooltip marker
+      /* Open Tooltip */
+      // marker.openTooltip(); //Tooltip marker muncul ketika halaman dipanggil
+
+      /* Polyline */
+      var latlongline = [
+        [-7.8, 110.37],
+        [-7.74, 110.66],
+        [-7.58, 110.82],
+      ]; //Koordinat garis
+      var polyline = L.polyline(latlongline, {
+        color: "blue", //warna garis
+        weight: 6, //tebal garis
+      });
+      polyline.addTo(map); //Polyline ditampilkan ketika halaman dipanggil
+      /* Popup Polyline */
+      polyline.bindPopup("Yogyakarta - Klaten - Surakarta"); //Popup ditampilkan ketika polyline di-klik
+      /* Open Popup Polyline ketika halaman dipanggil */
+      //polyline.openPopup(); //Popup muncul ketika halaman dibuka
+      /* Open Tooltip */
+      polyline.bindTooltip("Klik untuk informasi jalur"); //Tooltip polyline muncul halaman dipanggil
+
+      /* Circle */
+      var circle = L.circle([-7.5412767, 110.4462004], {
+        //Koordinat titik tengah circle
+        radius: 10000, //radius circle
+        color: "#cc3300", //warna garis tepi polygon
+        opacity: 0.7, //transparansi garis tepi
+        fillColor: "blue", //warna fill polygon
+        fillOpacity: 0.3, //transparansi fill polygon
+      });
+      circle.addTo(map); //Circle ditampilkan ketika halaman dipanggil
+      /* Popup Circle */
+      circle.bindPopup("Circle radius 10 Km");
+      /* Open Popup Circle ketika halaman dipanggil */
+      //circle.openPopup();
+
+      /* Polygon */
+      var latlongpolygon = [
+        [-7.8, 110.37],
+        [-7.74, 110.66],
+        [-7.58, 110.82],
+        [-7.48, 110.21],
+      ]; //koordinat vertex polygon
+      var polygon = L.polygon(latlongpolygon, {
+        color: "red", //Warna garis tepi polygon
+        opacity: 1, //Transparansi garis tepi polygon
+        fillColor: "blue", //Warna bagian tengah polygon
+        fillOpacity: 0.7, //Transparansi bagian tengah polygon
+      });
+      polygon.addTo(map); //Polygon ditampilkan ketika halaman dipanggil
+      /* Popup Polygon */
+      polygon.bindPopup("Yogyakarta - Klaten - Surakarta - Magelang");
+      /* Open Popup Polygon ketika halaman dipanggil */
+      //polygon.openPopup();
+
+      var basemaps = {
+        //list basemap
+        OSM: OSM,
+        "Google Satellite": GoogleSatellite,
+        "Google Hybrid": GoogleHybrid,
+      };
+      var Layers = {
+        //list layer
+        Marker: marker,
+        // "Jalan Utama": jalanutama,
+        // "Batas Kecamatan": adminkecamatan,
+      };
+      var layerControl = L.control.layers(basemaps, Layers, {
+        collapsed: true,
+      }); //false : disable/enable collapse pada pilihan basemap
+      layerControl.addTo(map);
+    </script>
+  </body>
+</html>
